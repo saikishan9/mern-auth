@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Home, About, Profile, SignIn, SignUp } from "./pages/index";
+import { Header } from "./components/index";
 
 export default function App() {
   const paths = [
@@ -15,6 +16,7 @@ export default function App() {
 
   return (
     <Router>
+      <Header />
       <Routes>
         {paths.map(({ path, element }) => (
           <Route key={path} path={path} element={element}></Route>
