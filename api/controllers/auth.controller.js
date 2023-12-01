@@ -47,3 +47,43 @@ export const signin = async (req, res, next) => {
     // next(errorHandler(300, "Something went wrong"));
   }
 };
+
+export const google = async (req, res, next) => {
+  const { displayName, email, profilePhoto } = req.body;
+  try {
+    let validUser = await User.findOne({
+      email,
+    });
+
+    if (!validUser) {
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashedPassword = bcryptjs.hashSync(generatedPassword);
+
+      validUser = new User({
+        username:
+          displayName.split(" ").join("").toLowerCase() +
+          Math.random().toString(36).slice(-8),
+        email,
+        password: hashedPassword,
+        profilePhoto,
+      });
+
+      await validUser.save();
+    }
+
+    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    const { password: hashedPassword, __v, ...rest } = validUser._doc;
+
+    //Examples:
+    // "Remember Me" for 15 minutes res.cookie('rememberme', '1', { expires: new Date(Date.now() + 900000), httpOnly: true });
+    // save as above res.cookie('rememberme', '1', { maxAge: 900000, httpOnly: true })
+    res
+      .cookie("access_token", token, { maxAge: 36_00_000, httpOnly: true })
+      .status(200)
+      .json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
