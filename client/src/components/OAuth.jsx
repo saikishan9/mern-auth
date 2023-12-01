@@ -6,7 +6,7 @@ import { signInSuccess } from "../redux/user/userSlice";
 export default function OAuth() {
   const dispatch = useDispatch();
 
-  const handleConnectWithGoogle = async () => {
+  const handleConnectionWithGoogle = async () => {
     try {
       const provider = new GoogleAuthProvider();
       const auth = getAuth(app);
@@ -40,7 +40,7 @@ export default function OAuth() {
   return (
     <button
       type="button"
-      onClick={handleConnectWithGoogle}
+      onClick={handleConnectionWithGoogle}
       className="bg-red-700 rounded-lg text-white p-3 uppercase hover:opacity-95"
     >
       Connect with Google

@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function Header() {
+  const { currentUser } = useSelector((state) => state.user);
+
   const list = [
     { value: "Home", path: "/" },
     { value: "About", path: "/about" },
@@ -14,11 +17,25 @@ export default function Header() {
           <h1 className="font-bold">Auth APP</h1>
         </Link>
         <ul className="flex gap-4">
-          {list.map(({ value, path }) => (
-            <Link to={path} key={path}>
-              <li>{value}</li>
-            </Link>
-          ))}
+          {list.map(({ value, path }) => {
+            if (path === "/sign-in" && currentUser) {
+              return (
+                <Link to={"/profile"} key={path}>
+                  <img
+                    src={currentUser.profilePhoto}
+                    alt="profilePhoto"
+                    className="h-7 w-7 rounded-full object-cover"
+                  />
+                </Link>
+              );
+            }
+
+            return (
+              <Link to={path} key={path}>
+                <li>{value}</li>
+              </Link>
+            );
+          })}
         </ul>
       </div>
     </div>

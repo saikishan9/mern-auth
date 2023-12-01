@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Home, About, Profile, SignIn, SignUp } from "./pages/index";
 import { Header } from "./components/index";
+import { Home, About, Profile, SignIn, SignUp } from "./pages/index";
+import PrivateRoute from "./components/PrivateRoute";
 
 export default function App() {
   const paths = [
@@ -18,9 +19,17 @@ export default function App() {
     <Router>
       <Header />
       <Routes>
-        {paths.map(({ path, element }) => (
-          <Route key={path} path={path} element={element}></Route>
-        ))}
+        {paths.map(({ path, element }) => {
+          if (path === "/profile") {
+            return (
+              <Route key={path} element={<PrivateRoute />}>
+                <Route path={path} element={element} />
+              </Route>
+            );
+          }
+
+          return <Route key={path} path={path} element={element} />;
+        })}
       </Routes>
     </Router>
   );
