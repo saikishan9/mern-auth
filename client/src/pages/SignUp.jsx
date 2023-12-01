@@ -31,8 +31,8 @@ export default function SignUp() {
 
       console.log(data);
 
-      if (data.success === false) {
-        setError(data.message);
+      if (data?.success === false) {
+        setError(data);
         return;
       }
 
@@ -84,7 +84,7 @@ export default function SignUp() {
         </Link>
       </div>
       <p className="text-red-700 mt-2">
-        {error && (error || "Something went wrong!")}
+        {error && (error.message || "Something went wrong!")}
       </p>
     </div>
   );
