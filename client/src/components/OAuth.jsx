@@ -2,9 +2,11 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase";
 import { useDispatch } from "react-redux";
 import { signInSuccess } from "../redux/user/userSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function OAuth() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleConnectionWithGoogle = async () => {
     try {
@@ -32,6 +34,8 @@ export default function OAuth() {
       console.log(data);
 
       dispatch(signInSuccess(data));
+
+      navigate("/");
     } catch (error) {
       console.log(`Couldn't connect with Google`, error);
     }
