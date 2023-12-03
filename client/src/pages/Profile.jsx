@@ -1,12 +1,18 @@
-import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
 import {
   getDownloadURL,
   getStorage,
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { app } from "../firebase";
+
+import {
+  updateUserFailure,
+  updateUserInitiated,
+  updateUserSuccess,
+} from "../redux/user/userSlice";
 
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -15,6 +21,7 @@ export default function Profile() {
   const [imageUploadProgress, setImageUploadProgress] = useState(0);
   const [imageUploadError, setImageUploadError] = useState(false);
   const fileRef = useRef(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (image) {
@@ -66,10 +73,9 @@ export default function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // setLoading(true);
-      // setError("");
+      dispatch(updateUserInitiated());
 
-      const res = await fetch(`/api/auth/signup`, {
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -81,16 +87,14 @@ export default function Profile() {
       console.log(data);
 
       if (data?.success === false) {
-        // setError(data);
+        dispatch(updateUserFailure(data));
         return;
       }
 
-      // navigate("/sign-in");
+      dispatch(updateUserSuccess(data));
     } catch (error) {
       console.log(error);
-      // setError(error);
-    } finally {
-      // setLoading(false);
+      dispatch(updateUserFailure(error));
     }
   };
 
@@ -167,7 +171,7 @@ export default function Profile() {
         </span>
       </div>
       <p className="text-red-700 mt-2">
-        {error && (error.message || "Something went wrong!")}
+        {error ? error.message || "Something went wrong!" : ""}
       </p>
     </div>
   );
