@@ -1,27 +1,26 @@
 export default function Home() {
   return (
-    <div className="p-3 max-w-4xl mx-auto">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis atque
-      esse tempore sint aspernatur libero consequatur suscipit harum deserunt
-      vero, doloribus possimus, quas fugiat necessitatibus autem voluptatem
-      soluta eligendi cupiditate illum, alias facilis exercitationem adipisci.
-      Veritatis molestias iste atque molestiae quisquam nobis, magnam corporis,
-      libero non soluta sapiente incidunt eos eius! Ipsum nisi blanditiis beatae
-      quasi qui dolores. Mollitia ipsa libero eaque qui aut fugit repellendus,
-      id cum magnam praesentium eius doloremque. Suscipit rem optio nostrum,
-      voluptates iusto ab quam dicta corporis perspiciatis facere minus, harum
-      reprehenderit, impedit beatae sint quos omnis sapiente perferendis
-      dolorum? Ea laudantium ducimus esse eaque cumque fuga vel id temporibus
-      non aliquid sequi sed ipsam rem labore dolores aliquam doloribus,
-      molestias in. Dignissimos quo in, blanditiis laudantium veniam sint
-      distinctio a aspernatur expedita, repellendus impedit hic nemo quidem
-      dolorem ea earum. Tempora ut corrupti impedit ipsa dicta, alias ducimus
-      sint nemo, quaerat voluptates qui animi facilis ratione vero nobis placeat
-      vel explicabo architecto quas accusantium inventore voluptatem porro?
-      Incidunt ullam beatae magnam illo impedit natus corporis ipsam excepturi,
-      optio, error, accusamus ut sit quae quaerat tenetur porro voluptatum hic?
-      Soluta placeat reprehenderit commodi at non qui in recusandae hic
-      perferendis, perspiciatis, officiis voluptates debitis laudantium?
+    <div className="px-4 py-12 max-w-3xl mx-auto">
+      <h1 className="text-3xl font-bold text-slate-800 mb-4">
+        Welcome to the MERN Auth App!
+      </h1>
+      <p className="text-slate-700 mb-4">
+        This is a full-stack web application built with the MERN (MongoDB,
+        Express, React, Node.js) stack. It includes authentication features that
+        allow users to sign up, log in, and log out, and provides access to
+        protected routes only for authenticated users.
+      </p>
+      <p className="text-slate-700 mb-4">
+        The front-end of the application is built with React and uses React
+        Router for client-side routing. The back-end is built with Node.js and
+        Express, and uses MongoDB as the database. Authentication is implemented
+        using JSON Web Tokens (JWT).
+      </p>
+      <p className="text-slate-700 mb-4">
+        This application is intended as a starting point for building full-stack
+        web applications with authentication using the MERN stack. Feel free to
+        use it as a template for your own projects!
+      </p>
     </div>
   );
 }
