@@ -4,11 +4,14 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { app } from "../firebase";
 
 import {
+  deleteUserFailure,
+  deleteUserInitiated,
+  deleteUserSuccess,
   updateUserFailure,
   updateUserInitiated,
   updateUserSuccess,
@@ -23,13 +26,7 @@ export default function Profile() {
   const fileRef = useRef(null);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (image) {
-      handleImageUpload(image);
-    }
-  }, [image]);
-
-  const handleImageUpload = (image) => {
+  const handleImageUpload = useCallback((image) => {
     try {
       const storage = getStorage(app);
       const fileName = new Date().getTime() + image.name;
@@ -51,7 +48,10 @@ export default function Profile() {
         () => {
           getDownloadURL(uploadTask.snapshot.ref)
             .then((downloadURL) => {
-              setFormData({ ...formData, profilePhoto: downloadURL });
+              setFormData((prevFormData) => ({
+                ...prevFormData,
+                profilePhoto: downloadURL,
+              }));
             })
             .catch((err) => {
               console.log(err);
@@ -61,7 +61,13 @@ export default function Profile() {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (image) {
+      handleImageUpload(image);
+    }
+  }, [handleImageUpload, image]);
 
   const handleChange = (e) => {
     const {
@@ -95,6 +101,32 @@ export default function Profile() {
     } catch (error) {
       console.log(error);
       dispatch(updateUserFailure(error));
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      dispatch(deleteUserInitiated());
+
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+
+      console.log(data);
+
+      if (data?.success === false) {
+        dispatch(deleteUserFailure(data));
+        return;
+      }
+
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      console.log(error);
+      dispatch(deleteUserFailure(error));
     }
   };
 
@@ -165,7 +197,12 @@ export default function Profile() {
         </button>
       </form>
       <div className="flex justify-between mt-3">
-        <span className="text-red-700 cursor-pointer">Delete Account</span>
+        <span
+          className="text-red-700 cursor-pointer"
+          onClick={handleDeleteAccount}
+        >
+          Delete Account
+        </span>
         <span to="/sign-in" className="text-red-700 cursor-pointer">
           Sign-out
         </span>
