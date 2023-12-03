@@ -12,6 +12,7 @@ import {
   deleteUserFailure,
   deleteUserInitiated,
   deleteUserSuccess,
+  signout,
   updateUserFailure,
   updateUserInitiated,
   updateUserSuccess,
@@ -130,6 +131,16 @@ export default function Profile() {
     }
   };
 
+  const handleSignout = async () => {
+    try {
+      await fetch(`/api/auth/signout`);
+
+      dispatch(signout());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const inputProps = (id) => ({
     className: "bg-slate-100 p-3 rounded-lg",
     onChange: handleChange,
@@ -203,7 +214,7 @@ export default function Profile() {
         >
           Delete Account
         </span>
-        <span to="/sign-in" className="text-red-700 cursor-pointer">
+        <span onClick={handleSignout} className="text-red-700 cursor-pointer">
           Sign-out
         </span>
       </div>

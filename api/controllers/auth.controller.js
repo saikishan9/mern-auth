@@ -48,6 +48,12 @@ export const signin = async (req, res, next) => {
   }
 };
 
+export const signout = async (req, res) => {
+  try {
+    res.clearCookie("access_token").status(200).json(`Signout success!`);
+  } catch (error) {}
+};
+
 export const google = async (req, res, next) => {
   const { displayName, email, profilePhoto } = req.body;
   try {
