@@ -24,6 +24,7 @@ export default function Profile() {
   const [image, setImage] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(0);
   const [imageUploadError, setImageUploadError] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
   const fileRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -91,14 +92,13 @@ export default function Profile() {
       });
       const data = await res.json();
 
-      console.log(data);
-
       if (data?.success === false) {
         dispatch(updateUserFailure(data));
         return;
       }
 
       dispatch(updateUserSuccess(data));
+      setUpdateSuccess(true);
     } catch (error) {
       console.log(error);
       dispatch(updateUserFailure(error));
@@ -116,8 +116,6 @@ export default function Profile() {
         },
       });
       const data = await res.json();
-
-      console.log(data);
 
       if (data?.success === false) {
         dispatch(deleteUserFailure(data));
@@ -220,6 +218,9 @@ export default function Profile() {
       </div>
       <p className="text-red-700 mt-2">
         {error ? error.message || "Something went wrong!" : ""}
+      </p>
+      <p className="text-green-700 mt-2">
+        {updateSuccess ? "User updated successfully!" : ""}
       </p>
     </div>
   );
